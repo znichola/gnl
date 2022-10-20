@@ -6,7 +6,135 @@
 /*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:21 by znichola          #+#    #+#             */
-/*   Updated: 2022/10/14 15:55:22 by znichola         ###   ########.fr       */
+/*   Updated: 2022/10/20 23:41:42 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "get_next_line.h"
+
+char	*ft_strnjoin(char const *s1, char const *s2, size_t n)
+{
+	char	*ret;
+	char	*r;
+	size_t	i;
+
+	i = ft_strlen(s2);
+
+	if (n > i)
+		i = ft_strlen(s1) + i;
+	else
+		i = ft_strlen(s1) + n;
+	ret = (char *)malloc(sizeof(char) * (i + 1));
+	if (!ret)
+		return (NULL);
+	r = ret;
+	while (*s1)
+		*r++ = *s1++;
+	while (*s2 && n-- >= 0)
+		*r++ = *s2++;
+	*r = '\0';
+	// free(s2);
+	return (ret);
+}
+
+void	*ft_memcpy(void *dest, const void *src, size_t n)
+{
+	unsigned char	*d;
+	unsigned char	*s;
+
+	d = (unsigned char *)dest;
+	s = (unsigned char *)src;
+	if (dest != NULL || src != NULL)
+		while (n-- > 0)
+			*d++ = *s++;
+	return (dest);
+}
+
+char	*ft_strndup(const char *s, size_t n)
+{
+	char	*ret;
+	size_t	len;
+	
+	len = ft_strlen(s);
+	if (n + 1 < len)
+		len = n;
+	ret = (char *)malloc(sizeof(char) * (len + 1));
+	if (!ret)
+		return (NULL);
+	return ((char *)ft_memcpy(ret, s, (len + 1)));
+}
+
+size_t	ft_strlcat(char *dest, const char *src, size_t size)
+{
+	char	*td;
+
+	td = dest;
+	if (size < ft_strlen(dest))
+		return (ft_strlen(src) + size);
+	while (*dest)
+	{
+		dest++;
+		size--;
+	}
+	while (*src && size-- > 1)
+		*dest++ = *src++;
+	*dest = '\0';
+	while (*src++)
+		dest++;
+	return (dest - td);
+}
+
+size_t	ft_strlcpy(char *dest, const char *src, size_t size)
+{
+	size_t	slen;
+
+	slen = ft_strlen(src);
+	if (size > 0)
+	{
+		if (slen + 1 < size)
+			while (*src)
+				*dest++ = *src++;
+		else if (size != 0)
+			while (--size > 0)
+				*dest++ = *src++;
+		*dest = '\0';
+	}
+	return (slen);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	while (*s)
+	{
+		if (*s == (char)c)
+			return ((char *)s);
+		s++;
+	}
+	if ((char)c == *s)
+		return ((char *)s);
+	return (NULL);
+}
+
+void	ft_bzero(void *s, size_t n)
+{
+	char	*p;
+
+	p = (char *)s;
+	while (n > 0)
+	{
+		*p = '\0';
+		p++;
+		n--;
+	}
+}
+
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	void	*ret;
+
+	ret = (void *)malloc(nmemb * size);
+	if (!ret)
+		return (NULL);
+	ft_bzero(ret, nmemb * size);
+	return (ret);
+}
