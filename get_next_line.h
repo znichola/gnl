@@ -6,7 +6,7 @@
 /*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:33 by znichola          #+#    #+#             */
-/*   Updated: 2022/10/21 02:03:37 by znichola         ###   ########.fr       */
+/*   Updated: 2022/10/21 19:54:53 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,14 @@
 # include <unistd.h>
 #include <fcntl.h>
 
-# define BUFFER_SIZE 2024
+# define BUFFER_SIZE 13
+# define DELIM '\n'
 
 typedef enum
 {
 	error,
+	malloc_error,
+	success,
 	file_end,
 	full_buff,
 	half_buff,
@@ -30,13 +33,16 @@ typedef enum
 	line_incomplete,
 }		t_ret;
 
+t_ret	process_chunk(char **chunk, char **split_chunk);
 char	*get_next_line(int fd);
-t_ret	process_buffer(char *strs, char *buff, char *ret, ssize_t r);
-t_ret	fill_buffer(int fd, char **b, ssize_t *r);
-t_ret	find_line(int fd, char *strs, char *buff, char *ret);
+t_ret	process_buffer(char **strs, char **buff, char **ret, ssize_t r);
+t_ret	fill_buffer(int fd, char *b, ssize_t *r);
+t_ret	find_line(int fd, char **strs, char *buff, char **ret);
 
 // utils
+char	*ft_nextword(char **str, char const c);
 size_t	ft_strlen(const char *s);
+char	*ft_strpmerg(char *s1, char *s2, char *s3);
 char	*ft_strnjoin(char const *s1, char const *s2, size_t n);
 char	*ft_strndup(const char *s, size_t n);
 void	*ft_memcpy(void *dest, const void *src, size_t n);

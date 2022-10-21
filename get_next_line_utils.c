@@ -6,11 +6,33 @@
 /*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:21 by znichola          #+#    #+#             */
-/*   Updated: 2022/10/21 01:06:57 by znichola         ###   ########.fr       */
+/*   Updated: 2022/10/21 19:38:22 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+char	*ft_nextword(char **str, char const c)
+{
+	char	*ret;
+	char	*end;
+	size_t	len;
+
+	while (**str == c && **str != '\0')
+		(*str)++;
+	end = (char *)*str;
+	// while (*end != c && *end != '\0')
+	// 	end++;
+	len = end - *str + 1;
+	ret = (char *)malloc(sizeof(char) * len);
+	if (!ret)
+		return (NULL);
+	end = ret;
+	while (len-- > 1)
+		*end++ = *(*str)++;
+	*end = '\0';
+	return (ret);
+}
 
 size_t	ft_strlen(const char *s)
 {
@@ -20,6 +42,30 @@ size_t	ft_strlen(const char *s)
 	while (s[i] != '\0')
 		i++;
 	return (i);
+}
+
+char	*ft_strpmerg(char *s1, char *s2, char *s3)
+{
+	char	*ret;
+	char	*r;
+	size_t	i;
+
+	if (!s3)
+		i = ft_strlen(s1);
+	else
+		i = s3 - s2;
+	ret = (char *)malloc(sizeof(char) * (i + 1));
+	if (!ret)
+		return (NULL);
+	r = ret;
+	while (*s1)
+		*r++ = *s1++;
+	while (*s2 && s2 <= s3)
+		*r++ = *s2++;
+	*r = '\0';
+	free(s1);
+	free(s2);
+	return (ret);
 }
 
 char	*ft_strnjoin(char const *s1, char const *s2, size_t n)
