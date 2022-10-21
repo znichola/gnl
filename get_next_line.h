@@ -6,7 +6,7 @@
 /*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:33 by znichola          #+#    #+#             */
-/*   Updated: 2022/10/21 19:54:53 by znichola         ###   ########.fr       */
+/*   Updated: 2022/10/22 01:42:21 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef enum
 	malloc_error,
 	success,
 	file_end,
+	stor_end,
 	full_buff,
 	half_buff,
 	line_complete,
@@ -40,6 +41,8 @@ t_ret	fill_buffer(int fd, char *b, ssize_t *r);
 t_ret	find_line(int fd, char **strs, char *buff, char **ret);
 
 // utils
+char	*ft_strdup(const char *s);
+char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_nextword(char **str, char const c);
 size_t	ft_strlen(const char *s);
 char	*ft_strpmerg(char *s1, char *s2, char *s3);

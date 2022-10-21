@@ -6,11 +6,41 @@
 /*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:21 by znichola          #+#    #+#             */
-/*   Updated: 2022/10/21 19:38:22 by znichola         ###   ########.fr       */
+/*   Updated: 2022/10/22 00:05:31 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+char	*ft_strdup(const char *s)
+{
+	char	*ret;
+	size_t	len;
+
+	len = ft_strlen(s) + 1;
+	ret = (char *)malloc(sizeof(char) * len);
+	if (!ret)
+		return (NULL);
+	return ((char *)ft_memcpy(ret, s, len));
+}
+
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*ret;
+	char	*r;
+
+	ret = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!ret)
+		return (NULL);
+	r = ret;
+	while (*s1)
+		*r++ = *s1++;
+	while (*s2)
+		*r++ = *s2++;
+	*r = '\0';
+	return (ret);
+}
 
 char	*ft_nextword(char **str, char const c)
 {
@@ -63,8 +93,8 @@ char	*ft_strpmerg(char *s1, char *s2, char *s3)
 	while (*s2 && s2 <= s3)
 		*r++ = *s2++;
 	*r = '\0';
-	free(s1);
-	free(s2);
+	// free(s1);
+	// free(s2);
 	return (ret);
 }
 
@@ -76,7 +106,7 @@ char	*ft_strnjoin(char const *s1, char const *s2, size_t n)
 
 	i = ft_strlen(s2);
 
-	if (n > i)
+	if (n > i || n == 0)
 		i = ft_strlen(s1) + i;
 	else
 		i = ft_strlen(s1) + n;
@@ -86,7 +116,8 @@ char	*ft_strnjoin(char const *s1, char const *s2, size_t n)
 	r = ret;
 	while (*s1)
 		*r++ = *s1++;
-	while (*s2 && n-- >= 0)
+	i += 1;
+	while (*s2 && i-- > 0)
 		*r++ = *s2++;
 	*r = '\0';
 	// free(s2);
