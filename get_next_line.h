@@ -6,16 +6,17 @@
 /*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:33 by znichola          #+#    #+#             */
-/*   Updated: 2022/10/21 00:20:25 by znichola         ###   ########.fr       */
+/*   Updated: 2022/10/21 02:03:37 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
-# define GET_NEST_LINE_H
+# define GET_NEXT_LINE_H
 
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+#include <fcntl.h>
 
 # define BUFFER_SIZE 2024
 
@@ -30,11 +31,12 @@ typedef enum
 }		t_ret;
 
 char	*get_next_line(int fd);
-t_ret	process_buffer(char *strs, char *buff, char *ret);
-t_ret	fill_buffer(int fd, char *b);
+t_ret	process_buffer(char *strs, char *buff, char *ret, ssize_t r);
+t_ret	fill_buffer(int fd, char **b, ssize_t *r);
 t_ret	find_line(int fd, char *strs, char *buff, char *ret);
 
 // utils
+size_t	ft_strlen(const char *s);
 char	*ft_strnjoin(char const *s1, char const *s2, size_t n);
 char	*ft_strndup(const char *s, size_t n);
 void	*ft_memcpy(void *dest, const void *src, size_t n);

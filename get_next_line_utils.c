@@ -6,11 +6,21 @@
 /*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:21 by znichola          #+#    #+#             */
-/*   Updated: 2022/10/20 23:41:42 by znichola         ###   ########.fr       */
+/*   Updated: 2022/10/21 01:06:57 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	i;
+
+	i = 0;
+	while (s[i] != '\0')
+		i++;
+	return (i);
+}
 
 char	*ft_strnjoin(char const *s1, char const *s2, size_t n)
 {

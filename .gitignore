@@ -1,1 +1,6 @@
 .vscode
+files
+*.o
+gnl
+Makefile
+a.*
