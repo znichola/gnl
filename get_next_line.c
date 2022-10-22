@@ -6,20 +6,18 @@
 /*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:11 by znichola          #+#    #+#             */
-/*   Updated: 2022/10/22 12:27:24 by znichola         ###   ########.fr       */
+/*   Updated: 2022/10/22 14:52:28 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-t_ret	process_buffer(char **strs, char **buff, char **ret, ssize_t r)
+t_ret	process_buffer(char **strs, char **buff, char **ret)
 {
 	char	*a;
 	char	*b;
 	
-	(void)r;
 	a = ft_strchr(*buff, DELIM);
-		// printf("\nsfsdfsdhere s:%ld, <%s> buff<%s>\n", s - *buff, s, *buff);
 	if (!a)
 	{
 		b = ft_strjoin(*ret, *buff);
@@ -45,18 +43,26 @@ t_ret	process_buffer(char **strs, char **buff, char **ret, ssize_t r)
 			free(a);
 			return (error2);
 		}
+		if (!*strs)
+			free(*strs);
 		*strs = a;
 		free(*ret);
 		*ret = b;
 		return (line_complete);
 	}
+		// free(*ret);
+		// *ret = NULL;
+		// *ret = b;
+		// return (line_incomplete);
 }
 
-t_ret	process_stored(char **strs, char **ret)
+t_ret	process_stored(char **strs, char **ret, char **buff)
 {
 	char	*a;
 	char	*b;
 	
+	if (!*strs)
+		return (stor_end);
 	a = ft_strchr(*strs, DELIM);
 	if (!a) // it is full of stuff
 	{
@@ -65,6 +71,7 @@ t_ret	process_stored(char **strs, char **ret)
 	}
 	else
 	{
+		a++;
 		b = ft_strdup(a);
 		if (!b)
 			return (error2);
@@ -79,9 +86,13 @@ t_ret	process_stored(char **strs, char **ret)
 	free(*ret);
 	*ret = b;
 	if (a)
-		return (file_end);
-	else 
-		return (stor_end);
+	{
+		free(*buff);
+		return (line_complete);
+	}
+	return (stor_end);
+	// else 
+	// 	return (stor_end);
 }
 
 t_ret	fill_buffer(int fd, char *b, ssize_t *r)
@@ -111,7 +122,7 @@ t_ret	find_line(int fd, char **strs, char *buff, char **ret)
 		fill = fill_buffer(fd, buff, &r);
 		// printf("buff<%s>\n", buff);
 		// printf("r:%zd\n%s\n", r, buff);
-		process = process_buffer(strs, &buff, ret, r);
+		process = process_buffer(strs, &buff, ret);
 		if (process == error2 || fill == error2)
 			return (error2);
 		else if (fill == file_end)
@@ -120,6 +131,29 @@ t_ret	find_line(int fd, char **strs, char *buff, char **ret)
 	return (line_complete);
 }
 
+char	*managment(int fd, char **buff, char **ret)
+{
+	// if (action == initialise)
+	// {
+		if (fd < 0 || BUFFER_SIZE <= 0)
+			return (NULL);
+		*ret = (char *)malloc(sizeof(char));
+		if (!*ret)
+			return (NULL);
+		*buff = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+		if (!*buff)
+		{
+			free(*ret);
+			return (NULL); // free stuff before quit
+		}
+		**ret = '\0';
+	// }
+	// else if (action == liberate)
+	// {
+	// 	free(**buff);
+	// }
+	return (*ret);
+}
 
 char	*get_next_line(int fd)
 {
@@ -128,26 +162,12 @@ char	*get_next_line(int fd)
 	char	*ret;
 	t_ret	f;
 	
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (!managment(fd, &buff, &ret))
 		return (NULL);
-	ret = (char *)malloc(sizeof(char));
-	if (!ret)
-		return (NULL);
-	buff = (char *)malloc(sizeof(char) * BUFFER_SIZE + 1);
-	if (!buff)
-	{
-		free(ret);
-		return (NULL); // free stuff before quit
-	}
-	*ret = '\0';
-	f = success;
-	if (rest[fd])
-		f = process_stored(&rest[fd], &ret);
-	if (f == file_end)
-	{
-		free(buff);
+	
+	f = process_stored(&rest[fd], &ret, &buff);
+	if (f == line_complete)
 		return (ret);
-	}
 	if (f == error2)
 		return (NULL);
 	f = find_line(fd, &rest[fd], buff, &ret);
@@ -155,27 +175,28 @@ char	*get_next_line(int fd)
 		return (NULL);
 	else if (f == file_end)
 	{
-		free(rest[fd]);
+		// free(rest[fd]);
 		rest[fd] = NULL;
 	}
 	free(buff);
 	return (ret);
 }
 
-
-// int main(void)
-// {
-// 	// (void)argc;
-// 	// (void)argv;
+#ifdef MAIN
+int main(void)
+{
+	// (void)argc;
+	// (void)argv;
 	
-// 	int fd = open("files/odyssey", O_RDONLY);
-// 	for (int i = 0; i < 20; i++)
-// 	{
-// 		char *l = get_next_line(fd);
-// 		// char *l = get_next_line(fd);
-// 		printf("\nl%d {%s}\n", i, l);
-// 		free(l);
-// 	}
-// 	close(fd);
-// 	return (0);
-// }
+	int fd = open("files/odyssey", O_RDONLY);
+	for (int i = 0; i < 20; i++)
+	{
+		char *l = get_next_line(fd);
+		// char *l = get_next_line(fd);
+		printf("\nl%d {%s}\n", i, l);
+		free(l);
+	}
+	close(fd);
+	return (0);
+}
+#endif /* main */
