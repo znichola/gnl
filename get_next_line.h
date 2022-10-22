@@ -6,7 +6,7 @@
 /*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:33 by znichola          #+#    #+#             */
-/*   Updated: 2022/10/22 02:33:31 by znichola         ###   ########.fr       */
+/*   Updated: 2022/10/22 12:29:19 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 
 typedef enum e_ret
 {
-	error,
+	error2,
 	malloc_error,
 	success,
 	file_end,
@@ -41,8 +41,6 @@ t_ret	fill_buffer(int fd, char *b, ssize_t *r);
 t_ret	find_line(int fd, char **strs, char *buff, char **ret);
 
 // utils
-void	*ft_memcpy(void *dest, const void *src, size_t n);
-
 char	*ft_strdup(const char *s);
 char	*ft_strjoin(char const *s1, char const *s2);
 size_t	ft_strlen(const char *s);
