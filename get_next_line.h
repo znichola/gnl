@@ -6,7 +6,7 @@
 /*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:33 by znichola          #+#    #+#             */
-/*   Updated: 2022/10/23 17:41:19 by znichola         ###   ########.fr       */
+/*   Updated: 2022/10/23 18:38:15 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,12 @@ typedef struct s_rest
 	char	*s; // current position
 } t_rest;
 
+// t_ret	fill_buffer(int fd, char *b, ssize_t *r);
+
 t_ret	process_chunk(char **chunk, char **split_chunk);
 char	*get_next_line(int fd);
 t_ret	process_buffer(char **strs, char **buff, char **ret);
-t_ret	fill_buffer(int fd, char *b, ssize_t *r);
+// t_ret	fill_buffer(int fd, char *b, ssize_t *r);
 t_ret	find_line(int fd, char **strs, char *buff, char **ret);
 
 // utils

@@ -6,7 +6,7 @@
 /*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:11 by znichola          #+#    #+#             */
-/*   Updated: 2022/10/23 18:21:07 by znichola         ###   ########.fr       */
+/*   Updated: 2022/10/23 18:39:31 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ t_ret	process_stored(char **strs, char **ret, char **buff)
 	// 	return (stor_end);
 }
 
-t_ret	fill_buffer(int fd, char *b, ssize_t *r)
+t_ret	fill_buffer2(int fd, char *b, ssize_t *r)
 {
 	ft_bzero(b, BUFFER_SIZE);
 	*r = read(fd, b, BUFFER_SIZE);
@@ -143,36 +143,51 @@ char	*managment(int fd, char **buff, char **ret)
 	return (*ret);
 }
 
-char	*get_next_line(int fd)
+// char	*get_next_line(int fd)
+// {
+// 	static	char *rest[4096];
+// 	char	*buff;
+// 	char	*ret;
+// 	t_ret	f;
+	
+// 	if (!managment(fd, &buff, &ret))
+// 		return (NULL);
+	
+// 	f = process_stored(&rest[fd], &ret, &buff);
+// 	if (f == line_complete)
+// 		return (ret);
+// 	if (f == error2)
+// 		return (NULL);
+// 	f = find_line(fd, &rest[fd], buff, &ret);
+// 	if (f == error2)
+// 		return (NULL);
+// 	else if (f == file_end)
+// 	{
+// 		// free(rest[fd]);
+// 		rest[fd] = NULL;
+// 	}
+// 	free(buff);
+// 	if (!*ret)
+// 	{
+// 		free(ret);
+// 		return (NULL);
+// 	}
+// 	return (ret);
+// }
+
+char	*fill_buffer(int fd, char *b, t_return *r)
 {
-	static	char *rest[4096];
-	char	*buff;
-	char	*ret;
-	t_ret	f;
-	
-	if (!managment(fd, &buff, &ret))
+	ft_bzero(b, BUFFER_SIZE);
+	*r = read(fd, b, BUFFER_SIZE);
+	if (*r < 0)
 		return (NULL);
-	
-	f = process_stored(&rest[fd], &ret, &buff);
-	if (f == line_complete)
-		return (ret);
-	if (f == error2)
-		return (NULL);
-	f = find_line(fd, &rest[fd], buff, &ret);
-	if (f == error2)
-		return (NULL);
-	else if (f == file_end)
-	{
-		// free(rest[fd]);
-		rest[fd] = NULL;
-	}
-	free(buff);
-	if (!*ret)
-	{
-		free(ret);
-		return (NULL);
-	}
-	return (ret);
+	else if (*r == BUFFER_SIZE)
+		*r = buffer_filled;
+	else if (*r >= 0)
+		*r = buffer_filled;
+	else
+		*r = end_of_file;
+	return (b);
 }
 
 char	*seekbuffer(int fd, t_rest *s, t_return *ret)
@@ -192,6 +207,7 @@ char	*seekbuffer(int fd, t_rest *s, t_return *ret)
 	if (!s->s || s->s - s->root >= BUFFER_SIZE)
 	{
 		s->s = s->root;
+		
 		ft_bzero(s->root, BUFFER_SIZE + 1);
 		*ret = read(fd, s->root, BUFFER_SIZE);
 		if (*ret < 0)
@@ -202,7 +218,7 @@ char	*seekbuffer(int fd, t_rest *s, t_return *ret)
 			*ret = end_of_file;
 	}
 	if (*ret == end_of_file && *(s->s) != DELIM)
-		printf("real end of file\n"); // misiing a case when the file does not end with a \n
+		; //printf("real end of file\n"); // misiing a case when the file does not end with a \n
 		// return (NULL);
 	if (*(s->s) == DELIM)
 	{
@@ -212,7 +228,7 @@ char	*seekbuffer(int fd, t_rest *s, t_return *ret)
 	return (s->s);
 }
 
-char	*gnl(int fd)
+char	*get_next_line(int fd)
 {
 	static t_rest rest[4096];
 	t_return r = unmodified;
@@ -228,11 +244,11 @@ char	*gnl(int fd)
 		// {
 		// 	printf("r:%d\n{%s}\n", r, ret);
 		// }
-		printf("loop:%d\n", r);
+		// printf("loop:%d\n", r);
 	}
 	if (r == end_of_file)
 	{
-		printf("end of file\n");
+		// printf("end of file\n");
 		free(rest[fd].root);
 	}
 	if (*ret == '\0')
