@@ -6,7 +6,7 @@
 /*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:21 by znichola          #+#    #+#             */
-/*   Updated: 2022/10/23 16:53:39 by znichola         ###   ########.fr       */
+/*   Updated: 2022/10/25 18:04:17 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ char	*ft_buffmerg(char *s, char *buff)
 	if (buff[j] == DELIM)
 		j++;
 	ret = (char *)malloc(sizeof(char) * (i + j + 1));
+	error_print("I malloc-ed in buff merg, ret:%p\n", ret);
 	if (!ret)
 		return (NULL);
 	r = ret;

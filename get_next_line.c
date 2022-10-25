@@ -6,7 +6,7 @@
 /*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:11 by znichola          #+#    #+#             */
-/*   Updated: 2022/10/23 18:39:31 by znichola         ###   ########.fr       */
+/*   Updated: 2022/10/25 18:08:34 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,9 @@ t_ret	find_line(int fd, char **strs, char *buff, char **ret)
 	fill = half_buff;
 	while (process == line_incomplete)
 	{
-		fill = fill_buffer(fd, buff, &r);
+		(void)r;
+		(void)fd;
+		// fill = fill_buffer(fd, buff, &r);
 		// printf("buff<%s>\n", buff);
 		// printf("r:%zd\n%s\n", r, buff);
 		process = process_buffer(strs, &buff, ret);
@@ -175,13 +177,39 @@ char	*managment(int fd, char **buff, char **ret)
 // 	return (ret);
 // }
 
+void error_print(const char *restrict fmt, ...)
+{
+	va_list ap;
+	va_start(ap, fmt);
+	#ifdef PRINT
+	vfprintf(stdout, fmt, ap);
+	#endif
+	va_end(ap);
+}
+
+char	*freeret(char *stat, char *z)
+{
+
+	if (!stat)
+	{
+		free(stat);
+		stat = NULL;
+	}
+	if (!z)
+		free(z);
+	return (NULL);
+}
+
 char	*fill_buffer(int fd, char *b, t_return *r)
 {
+	int	foo;
+
 	ft_bzero(b, BUFFER_SIZE);
-	*r = read(fd, b, BUFFER_SIZE);
-	if (*r < 0)
+	foo = read(fd, b, BUFFER_SIZE);
+	// printf("foo:%d\n", foo);
+	if (foo < 0)
 		return (NULL);
-	else if (*r == BUFFER_SIZE)
+	else if (foo == BUFFER_SIZE)
 		*r = buffer_filled;
 	else if (*r >= 0)
 		*r = buffer_filled;
@@ -200,6 +228,7 @@ char	*seekbuffer(int fd, t_rest *s, t_return *ret)
 			*ret = malloc_error2;
 			return (NULL);
 		}
+		error_print("I malloc-ed the seekbuffer:%p\n", s->root);
 		s->s = s->root;
 	}
 	// printf("root:%p seek:%p diff:%d	", s->root, s->s, (int)(s->s - s->root));
@@ -209,13 +238,23 @@ char	*seekbuffer(int fd, t_rest *s, t_return *ret)
 		s->s = s->root;
 		
 		ft_bzero(s->root, BUFFER_SIZE + 1);
-		*ret = read(fd, s->root, BUFFER_SIZE);
-		if (*ret < 0)
-			return (NULL); // need to free s->root also.
-		else if (*ret == BUFFER_SIZE)
+		int foo = read(fd, s->root, BUFFER_SIZE);
+		// printf("read output:%d\n", foo);
+		if (foo < 0)
+		{
+			error_print("I freed s->root:%p\n", s->root);
+			return (freeret(s->root, NULL));
+		}
+			// return (NULL); // need to free s->root also.
+		else if (foo == BUFFER_SIZE)
 			*ret = buffer_filled;
-		else if (*ret >= 0)
+		else if (foo >= 0)
+		{
+			// printf("end of fileadasdasdasdsasd\n");
+			// s->root[foo] = 'g';
+			// s->s = s->root;
 			*ret = end_of_file;
+		}
 	}
 	if (*ret == end_of_file && *(s->s) != DELIM)
 		; //printf("real end of file\n"); // misiing a case when the file does not end with a \n
@@ -228,34 +267,64 @@ char	*seekbuffer(int fd, t_rest *s, t_return *ret)
 	return (s->s);
 }
 
+
 char	*get_next_line(int fd)
 {
 	static t_rest rest[4096];
 	t_return r = unmodified;
 	char *ret = (char *)calloc(1, 1);
+	error_print("I malloc-ed ret:%p\n", ret);
+	int bar = 1;
+
 	while (r != line_found && r != end_of_file && r != malloc_error2)
-	// while (r & (line_found | end_of_file | malloc_error2))
 	{
 		char *buff = seekbuffer(fd, &rest[fd], &r);
-		// printf("\nreturn[%d] seekbuffer{%s}\n", r, buff);
+		if (!buff)
+		{
+			// freeret(rest[fd].root, ret);
+			error_print("I freed the seek buffer:%p and ret%p\n", rest[fd].root, ret);
+			freeret(rest[fd].root, ret);
+			// free(rest[fd].root);
+			// free(ret);
+			// rest[fd].root = NULL;
+			return (freeret(rest[fd].root, ret));
+		}
+		// printf("\nreturn[%d] seekbuffer{%s} end of line:%d\n", r, buff, r);
 		ret = ft_buffmerg(ret, buff);
-		if (ft_strchr(ret, DELIM))
+		if (!ret)
+			return (freeret(NULL, buff));
+		if (!ret && ft_strchr(ret, DELIM)) //|| *buff != '\0')
 			r = line_found;
-		// {
-		// 	printf("r:%d\n{%s}\n", r, ret);
-		// }
-		// printf("loop:%d\n", r);
+		// else
+		// 	return (ret);
+		if (r == end_of_file)
+		{
+			if (bar == 1)
+				// printf("br is 2\n");
+			bar = 2;
+			// printf("this is the end of the file. baby\n");
+			// printf("buff{%s}\n", buff);
+			// printf("buff2{%s}\n", rest[fd].root);
+			// printf("free bufff\n");
+			// buff = NULL;
+			// return (ret);
+			error_print("I freed the seek buffer:%p\n", rest[fd].root);
+			free(rest[fd].root);
+			rest[fd].root = NULL;
+			return (NULL);
+		}
 	}
-	if (r == end_of_file)
-	{
-		// printf("end of file\n");
-		free(rest[fd].root);
-	}
-	if (*ret == '\0')
-	{
-		free(ret);
-		return (NULL);
-	}
+	// if (r == end_of_file)
+	// {
+	// 	// printf("end of file\n");
+	// 	free(rest[fd].root);
+	// }
+	// if (*ret == '\0')
+	// {
+	// 	return (freeret(ret));
+	// 	// free(ret);
+	// 	// return (NULL);
+	// }
 	return (ret);
 	
 	// char *buff = seekbuffer(fd, &rest[fd], &r);
@@ -270,10 +339,12 @@ int main(void)
 
 	printf("\nsubsstr{%s}\n", ft_subsstr(tst, tst+50));
 
-	int fd = open("files/odyssey", O_RDONLY);
+	int fd = open("files/empty", O_RDONLY);
 	char *ret = (char *)malloc(1);
 	*ret = '\0';
-	for (int i = 0; i < 20; i++)
+	// fd = 1000;
+	// close(fd);
+	for (int i = 0; i < 3; i++)
 	{
 		// static t_rest rest[4096];
 		// t_return r = unmodified;
@@ -288,10 +359,10 @@ int main(void)
 		// printf("\nbar:{%s}\n", bar);
 		// ret = seekbuffer(fd, &rest[fd], &r);
 
-		char *l = gnl(fd);
-		// char *l = get_next_line(fd);
+		// char *l = gnl(fd);
+		char *l = get_next_line(fd);
 		printf("\nl%d {%s}\n", i, l);
-		// free(l);
+		free(l);
 	}
 	close(fd);
 	return (0);
