@@ -6,7 +6,7 @@
 /*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:33 by znichola          #+#    #+#             */
-/*   Updated: 2022/10/25 21:32:44 by znichola         ###   ########.fr       */
+/*   Updated: 2022/10/25 20:23:53 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,28 +33,55 @@ typedef enum e_action
 	liberate
 }		t_action;
 
-# define LINE_FOUND 1U
-# define END_OF_FILE 2U
-# define LINE_INCOMPLETE 4U
-# define MALLOC_ERROR 8U
+typedef enum e_return
+{
+	unmodified = 1,
+	buffer_filled = 2,
+	buffer_advanced = 4,
+	end_of_file = 8,
+	malloc_error2 = 16,
+	line_found = 32
+}		t_return;
+
+typedef enum e_ret
+{
+	error2,
+	malloc_error,
+	success,
+	file_end,
+	stor_end,
+	full_buff,
+	half_buff,
+	line_complete,
+	line_incomplete,
+}		t_ret;
 
 typedef struct s_rest
 {
 	char	*root; // root
-	char	*seek; // current position
-	int		read_return;
+	char	*s; // current position
 } t_rest;
 
-/* to remove afterwards */
-void	error_print(const char *restrict fmt, ...);
+// t_ret	fill_buffer(int fd, char *b, ssize_t *r);
+void error_print(const char *restrict fmt, ...);
 
-/* get_net_line */
+
+// t_ret	process_chunk(char **chunk, char **split_chunk);
 char	*get_next_line(int fd);
+// t_ret	process_buffer(char **strs, char **buff, char **ret);
+// t_ret	fill_buffer(int fd, char *b, ssize_t *r);
+// t_ret	find_line(int fd, char **strs, char *buff, char **ret);
+// char	*fill_buffer(int fd, char *b, t_return *r);
 
-/* gnl_utils */
+// utils
+char	*ft_buffmerg(char *s, char *buff);
 void	*ft_calloc(size_t nmemb, size_t size);
+
+char	*ft_subsstr(char const *s, char const *end);
+char	*ft_strdup(const char *s);
+char	*ft_strjoin(char const *s1, char const *s2);
+size_t	ft_strlen(const char *s);
 char	*ft_strchr(const char *s, int c);
 void	ft_bzero(void *s, size_t n);
-char	*ft_buffmerg(char *s, char *buff);
 
 #endif /* get_next_line*/
