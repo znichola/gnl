@@ -6,7 +6,7 @@
 /*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:21 by znichola          #+#    #+#             */
-/*   Updated: 2022/10/25 18:04:17 by znichola         ###   ########.fr       */
+/*   Updated: 2022/10/25 20:25:25 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ char	*ft_buffmerg(char *s, char *buff)
 	if (buff[j] == DELIM)
 		j++;
 	ret = (char *)malloc(sizeof(char) * (i + j + 1));
-	error_print("I malloc-ed in buff merg, ret:%p\n", ret);
+	error_print("I malloc-ed in buff merg,	ret:%p\n", ret);
 	if (!ret)
 		return (NULL);
 	r = ret;
@@ -116,6 +116,7 @@ char	*ft_buffmerg(char *s, char *buff)
 	*r = '\0';
 	if (*s)
 		free(s);
+	error_print("I freed 			buff:%p\n", s);
 	return (ret);
 }
 
@@ -132,6 +133,10 @@ void	*ft_calloc(size_t nmemb, size_t size)
 
 char	*ft_strchr(const char *s, int c)
 {
+	// error_print("here trying to print shit%p\n", s);
+	// error_print("lsfjdsf {%s}\n", s);
+	if (!s)
+		return (NULL);
 	while (*s)
 	{
 		if (*s == (char)c)
