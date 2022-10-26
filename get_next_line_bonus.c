@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:11 by znichola          #+#    #+#             */
-/*   Updated: 2022/10/26 06:36:57 by znichola         ###   ########.fr       */
+/*   Updated: 2022/10/26 06:36:50 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void	initbuffer(t_rest *rest)
 {
@@ -75,17 +75,20 @@ char	*get_next_line(int fd)
 }
 
 // #ifdef MAIN
-// int main(int ac, char **av)
+// int	main(int ac, char **av)
 // {
+// 	int		fd;
+// 	char	*l;
+
 // 	(void)ac;
 // 	(void)av;
-// 	int fd = open("files/odyssey", O_RDONLY);
+// 	fd = open("files/odyssey", O_RDONLY);
 // 	if (fd == -1)
 // 		return (0);
 
 // 	for (int i = 0; i < 20; i++)
 // 	{
-// 		char *l = get_next_line(fd);
+// 		l = get_next_line(fd);
 // 		printf("\nl%d {%s}\n", i, l);
 // 		free(l);
 // 	}
