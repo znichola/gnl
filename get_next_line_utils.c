@@ -6,21 +6,21 @@
 /*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:21 by znichola          #+#    #+#             */
-/*   Updated: 2022/10/26 02:29:46 by znichola         ###   ########.fr       */
+/*   Updated: 2022/10/26 04:26:10 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void debug_print(const char *restrict fmt, ...)
-{
-	va_list ap;
-	va_start(ap, fmt);
-	#ifdef DEBUG
-	vfprintf(stdout, fmt, ap);
-	#endif
-	va_end(ap);
-}
+// void debug_print(const char *restrict fmt, ...)
+// {
+// 	va_list ap;
+// 	va_start(ap, fmt);
+// 	#ifdef DEBUG
+// 	vfprintf(stdout, fmt, ap);
+// 	#endif
+// 	va_end(ap);
+// }
 
 void malloc_print(const char *restrict fmt, ...)
 {
@@ -46,8 +46,6 @@ void	*ft_calloc(size_t nmemb, size_t size)
 
 char	*ft_strchr(const char *s, int c)
 {
-	// error_print("here trying to print shit%p\n", s);
-	// error_print("lsfjdsf {%s}\n", s);
 	if (!s)
 		return (NULL);
 	while (*s)
@@ -56,9 +54,7 @@ char	*ft_strchr(const char *s, int c)
 			return ((char *)s);
 		s++;
 	}
-	if ((char)c == *s)
-		return ((char *)s);
-	return (NULL);
+	return ((char*)s);
 }
 
 void	ft_bzero(void *s, size_t n)
@@ -74,16 +70,15 @@ void	ft_bzero(void *s, size_t n)
 	}
 }
 
-size_t	ft_strleno(char *s, char delim)
+size_t	ft_strleno(char *s)
 {
 	size_t	i;
 
-	i = 0;
 	if (!s)
 		return (0);
-	while (s[i] && s[i] != delim)
+	i = 0;
+	while (s[i] && s[i] != DELIM)
 	{
-		// printf("s[%c]\n", s[i]);
 		i++;
 	}
 	if (s[i] == DELIM)
@@ -91,31 +86,29 @@ size_t	ft_strleno(char *s, char delim)
 	return (i);
 }
 
-char	*ft_buffmerg(char *s, char *buff)
+char *ft_strmerg(char *ret, char *buff)
 {
-	char	*ret;
-	char	*r;
-	size_t	i;
-	size_t	j;
-
-	i = ft_strleno(s, DELIM);
-	j = ft_strleno(buff, DELIM);
-	if (!buff)
-		return (s);
-	ret = (char *)malloc(sizeof(char) * (i + j + 1));
-	malloc_print("I malloc-ed in buff merg,	ret:%p\n", ret);
-	if (!ret)
+	char	*f_ret;
+	char	*f_r;
+	char	*t;
+	
+	f_ret = (char *)malloc((ft_strleno(ret) + ft_strleno(buff) + 1) * sizeof(char));
+	if (!f_ret)
 		return (NULL);
-	r = ret;
-	while (*s)
-		*r++ = *s++;
-	while (*buff != '\0' && *buff != DELIM)
-		*r++ = *buff++;
-	if (*buff == DELIM)
-		*r++ = DELIM;
-	*r = '\0';
-	if (*s)
-		free(s);
-	malloc_print("I freed 			buff:%p\n", s);
-	return (ret);
+	f_r = f_ret;
+	t = ret;
+	if (ret)
+		while (*ret)
+			*f_r++ = *ret++;
+	if (buff)
+	{
+		while (*buff && *buff != DELIM)
+			*f_r++ = *buff++;
+		if (*buff == DELIM)
+			*f_r++ = '\n';
+	}
+	*f_r = '\0';
+	if (t)
+		free(t);
+	return (f_ret);
 }

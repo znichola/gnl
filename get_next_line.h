@@ -6,7 +6,7 @@
 /*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:33 by znichola          #+#    #+#             */
-/*   Updated: 2022/10/25 21:32:44 by znichola         ###   ########.fr       */
+/*   Updated: 2022/10/26 04:27:34 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <fcntl.h>
 #include <stdarg.h>
 
-#define MAIN
+// #define MAIN
 
 # ifdef MAIN
 #  define PRINT
@@ -42,11 +42,10 @@ typedef struct s_rest
 {
 	char	*root; // root
 	char	*seek; // current position
-	int		read_return;
 } t_rest;
 
 /* to remove afterwards */
-void	error_print(const char *restrict fmt, ...);
+// void	error_print(const char *restrict fmt, ...);
 
 /* get_net_line */
 char	*get_next_line(int fd);
@@ -55,6 +54,8 @@ char	*get_next_line(int fd);
 void	*ft_calloc(size_t nmemb, size_t size);
 char	*ft_strchr(const char *s, int c);
 void	ft_bzero(void *s, size_t n);
+char	*ft_strmerg(char *rest, char *buff);
+
 char	*ft_buffmerg(char *s, char *buff);
 
 #endif /* get_next_line*/
