@@ -6,7 +6,7 @@
 /*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:21 by znichola          #+#    #+#             */
-/*   Updated: 2022/10/25 22:03:45 by znichola         ###   ########.fr       */
+/*   Updated: 2022/10/26 02:29:46 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,23 @@ void	ft_bzero(void *s, size_t n)
 	}
 }
 
+size_t	ft_strleno(char *s, char delim)
+{
+	size_t	i;
+
+	i = 0;
+	if (!s)
+		return (0);
+	while (s[i] && s[i] != delim)
+	{
+		// printf("s[%c]\n", s[i]);
+		i++;
+	}
+	if (s[i] == DELIM)
+		i++;
+	return (i);
+}
+
 char	*ft_buffmerg(char *s, char *buff)
 {
 	char	*ret;
@@ -81,16 +98,10 @@ char	*ft_buffmerg(char *s, char *buff)
 	size_t	i;
 	size_t	j;
 
-	i = 0;
-	j = 0;
+	i = ft_strleno(s, DELIM);
+	j = ft_strleno(buff, DELIM);
 	if (!buff)
 		return (s);
-	while (s[i] != '\0')
-		i++;
-	while (buff[j] != '\0' && *buff != DELIM)
-		j++;
-	if (buff[j] == DELIM)
-		j++;
 	ret = (char *)malloc(sizeof(char) * (i + j + 1));
 	malloc_print("I malloc-ed in buff merg,	ret:%p\n", ret);
 	if (!ret)
