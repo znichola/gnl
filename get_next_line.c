@@ -6,52 +6,48 @@
 /*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:11 by znichola          #+#    #+#             */
-/*   Updated: 2022/10/26 05:14:58 by znichola         ###   ########.fr       */
+/*   Updated: 2022/10/26 05:48:33 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	initbuffer(t_rest *rest)
+void	initbuffer(t_rest *rest)
 {
-	if (rest->root == NULL)
-	{
-		rest->root = (char *)ft_calloc(sizeof(char), BUFFER_SIZE + 1);
-			if (!rest->root)
-				return (MALLOC_ERROR);
-		rest->seek = rest->root;
-	}
-	return (1);
+	rest->root = (char *)ft_calloc(sizeof(char), BUFFER_SIZE + 1);
+	//if (!rest->root)
+	//	return (MALLOC_ERROR);
+	rest->seek = rest->root;
 }
 
-char *freeret(t_rest *rest, int r, char *ret)
+int	foo(int fd, t_rest *rest)
 {
-	free(rest->root);
-	rest->root = NULL;
-	rest->seek = NULL;
-	if (r == -1)
-		free(ret);
-	return (ret);
+	int	read_out;
+
+	read_out = read(fd, rest->root, BUFFER_SIZE);
+	if (read_out < 1)
+	{
+		free(rest->root);
+		rest->root = NULL;
+		rest->seek = NULL;
+		return (1);
+	}
+	rest->root[read_out] = '\0';
+	rest->seek = rest->root;
+	return (0);
 }
 
 char	*seekline(int fd, t_rest *rest)
 {
 	char	*s;
 	char	*ret;
-	int		read_out;
 	
-	read_out = 1;
 	ret = NULL;
 	while (1)
 	{
 		if (rest->seek[0] == '\0')
-		{
-			read_out = read(fd, rest->root, BUFFER_SIZE);
-			rest->root[read_out] = '\0';
-			if (read_out <= 0)
-				return (freeret(rest, read_out, ret));
-			rest->seek = rest->root;
-		}
+			if (foo(fd, rest))
+				return (ret);
 		s = ft_strchr(rest->seek, DELIM);
 		if (*s != '\n')
 		{
@@ -75,7 +71,8 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	initbuffer(&rest[fd]);
+	if (!rest[fd].root)
+		initbuffer(&rest[fd]);
 	return (seekline(fd, &rest[fd]));
 }
 
