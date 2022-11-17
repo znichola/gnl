@@ -6,19 +6,19 @@
 /*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:11 by znichola          #+#    #+#             */
-/*   Updated: 2022/10/26 06:36:57 by znichola         ###   ########.fr       */
+/*   Updated: 2022/11/17 13:44:27 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void	initbuffer(t_rest *rest)
+void	gnl_initbuffer(t_rest *rest)
 {
-	rest->root = (char *)ft_calloc(sizeof(char), BUFFER_SIZE + 1);
+	rest->root = (char *)ft_gnl_calloc(sizeof(char), BUFFER_SIZE + 1);
 	rest->seek = rest->root;
 }
 
-int	foo(int fd, t_rest *rest)
+int	gnl_foo(int fd, t_rest *rest)
 {
 	int	read_out;
 
@@ -35,7 +35,7 @@ int	foo(int fd, t_rest *rest)
 	return (0);
 }
 
-char	*seekline(int fd, t_rest *rest)
+char	*gnl_seekline(int fd, t_rest *rest)
 {
 	char	*s;
 	char	*ret;
@@ -44,48 +44,51 @@ char	*seekline(int fd, t_rest *rest)
 	while (1)
 	{
 		if (rest->seek[0] == '\0')
-			if (foo(fd, rest))
+			if (gnl_foo(fd, rest))
 				return (ret);
-		s = ft_strchr(rest->seek, DELIM);
+		s = ft_gnl_strchr(rest->seek, DELIM);
 		if (*s != '\n')
 		{
-			ret = ft_strmerg(ret, rest->seek);
+			ret = ft_gnl_strmerg(ret, rest->seek);
 			if (!ret)
 				return (NULL);
 			rest->seek = s;
 		}
 		else
 		{
-			ret = ft_strmerg(ret, rest->seek);
+			ret = ft_gnl_strmerg(ret, rest->seek);
 			rest->seek = s + 1;
 			return (ret);
 		}
 	}
 }
 
-char	*get_next_line(int fd)
+char	*ft_get_next_line(int fd)
 {
 	static t_rest	rest[4096];
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	if (!rest[fd].root)
-		initbuffer(&rest[fd]);
-	return (seekline(fd, &rest[fd]));
+		gnl_initbuffer(&rest[fd]);
+	return (gnl_seekline(fd, &rest[fd]));
 }
 
 // #ifdef MAIN
-// int main(int ac, char **av)
+// int	main(int ac, char **av)
 // {
+// 	int		fd;
+// 	char	*l;
+
 // 	(void)ac;
 // 	(void)av;
-// 	int fd = open("files/odyssey", O_RDONLY);
+// 	fd = open("files/odyssey", O_RDONLY);
 // 	if (fd == -1)
 // 		return (0);
 
 // 	for (int i = 0; i < 20; i++)
 // 	{
-// 		char *l = get_next_line(fd);
+// 		l = get_next_line(fd);
 // 		printf("\nl%d {%s}\n", i, l);
 // 		free(l);
 // 	}

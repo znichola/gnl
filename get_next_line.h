@@ -6,12 +6,12 @@
 /*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:33 by znichola          #+#    #+#             */
-/*   Updated: 2022/10/26 06:26:26 by znichola         ###   ########.fr       */
+/*   Updated: 2022/11/17 13:44:27 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -25,6 +25,10 @@
 // #  define PRINT
 // #  define BUFFER_SIZE 13
 // # endif /* main */
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 1024
+# endif
 
 # define DELIM '\n'
 
@@ -46,14 +50,14 @@ typedef struct s_rest
 }	t_rest;
 
 /* get_net_line */
-char	*get_next_line(int fd);
+char	*ft_get_next_line(int fd);
 
 /* gnl_utils */
-void	*ft_calloc(size_t nmemb, size_t size);
-char	*ft_strchr(const char *s, int c);
-void	ft_bzero(void *s, size_t n);
-char	*ft_strmerg(char *rest, char *buff);
+void	*ft_gnl_calloc(size_t nmemb, size_t size);
+char	*ft_gnl_strchr(const char *s, int c);
+void	ft_gnl_bzero(void *s, size_t n);
+char	*ft_gnl_strmerg(char *rest, char *buff);
 
-char	*ft_buffmerg(char *s, char *buff);
+char	*ft_gnl_buffmerg(char *s, char *buff);
 
 #endif /* get_next_line*/

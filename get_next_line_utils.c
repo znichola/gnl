@@ -6,24 +6,24 @@
 /*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:21 by znichola          #+#    #+#             */
-/*   Updated: 2022/10/26 06:16:04 by znichola         ###   ########.fr       */
+/*   Updated: 2022/11/17 13:45:11 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-void	*ft_calloc(size_t nmemb, size_t size)
+void	*ft_gnl_calloc(size_t nmemb, size_t size)
 {
 	void	*ret;
 
 	ret = (void *)malloc(nmemb * size);
 	if (!ret)
 		return (NULL);
-	ft_bzero(ret, nmemb * size);
+	ft_gnl_bzero(ret, nmemb * size);
 	return (ret);
 }
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_gnl_strchr(const char *s, int c)
 {
 	if (!s)
 		return (NULL);
@@ -36,7 +36,7 @@ char	*ft_strchr(const char *s, int c)
 	return ((char *)s);
 }
 
-void	ft_bzero(void *s, size_t n)
+void	ft_gnl_bzero(void *s, size_t n)
 {
 	char	*p;
 
@@ -49,7 +49,7 @@ void	ft_bzero(void *s, size_t n)
 	}
 }
 
-size_t	ft_stl(char *s)
+size_t	ft_gnl_stl(char *s)
 {
 	size_t	i;
 
@@ -65,13 +65,13 @@ size_t	ft_stl(char *s)
 	return (i);
 }
 
-char	*ft_strmerg(char *ret, char *buff)
+char	*ft_gnl_strmerg(char *ret, char *buff)
 {
 	char	*f_ret;
 	char	*f_r;
 	char	*t;
 
-	f_ret = (char *)malloc((ft_stl(ret) + ft_stl(buff) + 1) * sizeof(char));
+	f_ret = (char *)malloc((ft_gnl_stl(ret) + ft_gnl_stl(buff) + 1) * sizeof(char));
 	if (!f_ret)
 		return (NULL);
 	f_r = f_ret;
