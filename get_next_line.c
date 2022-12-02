@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: znichola <znichola@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:11 by znichola          #+#    #+#             */
-/*   Updated: 2022/11/17 13:44:27 by znichola         ###   ########.fr       */
+/*   Updated: 2022/12/02 17:48:17 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,11 @@ char	*ft_get_next_line(int fd)
 	if (!rest[fd].root)
 		gnl_initbuffer(&rest[fd]);
 	return (gnl_seekline(fd, &rest[fd]));
+}
+
+char	*get_next_line(int fd)
+{
+	return (ft_get_next_line(fd));
 }
 
 // #ifdef MAIN

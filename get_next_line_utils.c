@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: znichola <znichola@student.42.fr>          +#+  +:+       +#+        */
+/*   By: znichola <znichola@student.42lausanne.ch>  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 15:55:21 by znichola          #+#    #+#             */
-/*   Updated: 2022/11/17 13:45:11 by znichola         ###   ########.fr       */
+/*   Updated: 2022/12/02 17:16:56 by znichola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	ft_gnl_bzero(void *s, size_t n)
 	}
 }
 
-size_t	ft_gnl_stl(char *s)
+size_t	ft_gnl_l(char *s)
 {
 	size_t	i;
 
@@ -71,7 +71,7 @@ char	*ft_gnl_strmerg(char *ret, char *buff)
 	char	*f_r;
 	char	*t;
 
-	f_ret = (char *)malloc((ft_gnl_stl(ret) + ft_gnl_stl(buff) + 1) * sizeof(char));
+	f_ret = (char *)malloc((ft_gnl_l(ret) + ft_gnl_l(buff) + 1) * sizeof(char));
 	if (!f_ret)
 		return (NULL);
 	f_r = f_ret;
